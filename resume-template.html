@@ -1,0 +1,221 @@
+<!--
+================================================================================
+  RESUME TEMPLATE — How to use
+================================================================================
+
+  GIVE THIS FILE TO AN AI (or use it in PowerShell) ALONG WITH YOUR CONTENT.
+  The AI fills in the placeholders and copies/repeats the marked blocks as
+  needed. The styling, fonts, sizes, colors, and spacing are all locked in
+  the <style> block — DO NOT change them unless you want to alter the look.
+
+  ----------------------------------------------------------------------------
+  SINGLE-VALUE PLACEHOLDERS (replace once, anywhere they appear):
+  ----------------------------------------------------------------------------
+    {{NAME}}              Full name shown in the header             (e.g. "Jane Doe")
+    {{EMAIL}}             Email address                              (e.g. "jane@example.com")
+    {{LINKEDIN_URL}}      LinkedIn URL WITHOUT https://             (e.g. "linkedin.com/in/janedoe")
+    {{LINKEDIN_LABEL}}    What to display for the link               (usually same as URL)
+    {{SUMMARY}}           Professional summary paragraph.
+                          Wrap any metric or keyword you want bold in <strong>...</strong>.
+
+  ----------------------------------------------------------------------------
+  REPEATING BLOCKS (copy the block between START/END markers as many times
+  as needed; delete the marker comments in the final output):
+  ----------------------------------------------------------------------------
+    COMPETENCY_TAG   — one <span> per competency (sidebar tags)
+    EDU_ITEM         — one <div class="edu-item"> per degree
+    CERT_ITEM        — one <div class="cert-item"> per certification
+    SKILL_GROUP      — one <div class="skill-group"> per skill category
+    JOB              — one <div class="job"> per job; bullets go inside the <ul>
+
+  ----------------------------------------------------------------------------
+  STYLE FACTS (so an AI can preserve them when editing):
+  ----------------------------------------------------------------------------
+    Page width:       max 8.5in, padding 5mm top/bottom, 8mm left/right
+    Body font:        'Mulish', fallback 'DM Sans', sans-serif
+    Body color:       #1a1a2e (near-black navy)
+    Accent color:     #0F83C0 (mid blue) — used for header rule, section title bg,
+                      competency tags, edu/cert org names, job role italics
+    Tag bg / border:  #e8f4fb / #c2e0f0 (very light blue)
+    Muted text:       #444 (contact row, skill list)
+    Period text:      #777 (job period dates)
+    Layout:           CSS grid, sidebar 31% / main 1fr, 11px gap
+    Page-break rule:  jobs, edu items, cert items, skill groups never split
+
+    Type scale (px):
+      h1 (name)             24 / weight 800
+      job-company           11 / weight 700
+      summary-text          10.5 / line-height 1.45
+      edu-degree            10.5 / weight 700
+      job-role              10  / weight 600 italic (accent color)
+      job li / skill-list   10  / line-height 1.42
+      edu-org / cert-*      10
+      contact-row           10
+      competency-tag        9.5 / weight 600
+      skill-category        9.5 / weight 700 uppercase
+      job-period            9.5 / color #777
+      section-title         9   / weight 700 uppercase, white on accent bg
+
+    Section spacing:  6–7px between blocks, 1.5–3px between items inside a block
+
+  ----------------------------------------------------------------------------
+  POWERSHELL USAGE (string-replace single fields, then save as a new file):
+  ----------------------------------------------------------------------------
+    $tpl = Get-Content -Raw -Path 'C:\Users\yendy\resume-template.html'
+    $out = $tpl `
+      -replace '\{\{NAME\}\}',          'Jane Doe' `
+      -replace '\{\{EMAIL\}\}',         'jane@example.com' `
+      -replace '\{\{LINKEDIN_URL\}\}',  'linkedin.com/in/janedoe' `
+      -replace '\{\{LINKEDIN_LABEL\}\}','linkedin.com/in/janedoe' `
+      -replace '\{\{SUMMARY\}\}',       'Operations leader with <strong>10+ years</strong>...'
+    Set-Content -Path 'C:\Users\yendy\my-resume.html' -Value $out -Encoding UTF8
+
+    For the repeating blocks (competencies, jobs, etc.) it's easier to ask an
+    AI to assemble the final HTML — give it this template + your content list
+    and it will paste in the right number of blocks.
+
+  ----------------------------------------------------------------------------
+  IMPORTANT — DO NOT INCLUDE A CITY/STATE OR PHYSICAL LOCATION ANYWHERE.
+  ----------------------------------------------------------------------------
+================================================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{NAME}} — CV</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap');
+  @font-face { font-family: 'DM Sans'; src: url('./fonts/dm-sans-latin.woff2') format('woff2'); font-weight: 100 1000; font-style: normal; font-display: swap; }
+  @font-face { font-family: 'DM Sans'; src: url('./fonts/dm-sans-latin-ext.woff2') format('woff2'); font-weight: 100 1000; font-style: normal; font-display: swap; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: 'Mulish', 'DM Sans', sans-serif; font-size: 11px; line-height: 1.42; color: #1a1a2e; background: #ffffff; }
+  a { color: inherit; text-decoration: none; white-space: nowrap; }
+  .page { width: 100%; max-width: 8.5in; margin: 0 auto; padding: 5mm 8mm; }
+  .header { margin-bottom: 6px; }
+  .header h1 { font-family: 'Mulish', 'DM Sans', sans-serif; font-size: 24px; font-weight: 800; color: #1a1a2e; letter-spacing: -0.01em; line-height: 1.05; margin-bottom: 3px; }
+  .header-rule { height: 2px; background-color: #0F83C0; border-radius: 2px; margin-bottom: 4px; }
+  .contact-row { display: flex; flex-wrap: wrap; gap: 2px 7px; font-size: 10px; color: #444; line-height: 1.25; }
+  .contact-row a { color: #444; }
+  .contact-row .sep { color: #bbb; margin: 0 1px; }
+  .body-grid { display: grid; grid-template-columns: 31% 1fr; gap: 0 11px; align-items: start; }
+  .section-title { display: block; background-color: #0F83C0; color: #ffffff; font-family: 'Mulish', 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 1.5px 4px; margin-bottom: 4px; line-height: 1.25; }
+  .sidebar .section { margin-bottom: 7px; }
+  .competencies-grid { display: flex; flex-wrap: wrap; gap: 2px; }
+  .competency-tag { font-size: 9.5px; font-weight: 600; color: #0F83C0; background: #e8f4fb; padding: 1.5px 4px; border-radius: 2px; border: 1px solid #c2e0f0; line-height: 1.25; }
+  .edu-item { margin-bottom: 3px; }
+  .edu-degree { font-size: 10.5px; font-weight: 700; color: #1a1a2e; line-height: 1.25; }
+  .edu-org { font-size: 10px; font-weight: 600; color: #0F83C0; font-style: italic; }
+  .cert-item { margin-bottom: 2px; }
+  .cert-title { font-size: 10px; font-weight: 600; color: #1a1a2e; line-height: 1.25; }
+  .cert-org { font-size: 10px; color: #0F83C0; font-style: italic; }
+  .skill-group { margin-bottom: 3px; }
+  .skill-category { font-size: 9.5px; font-weight: 700; color: #1a1a2e; text-transform: uppercase; letter-spacing: 0.04em; }
+  .skill-list { font-size: 10px; color: #444; line-height: 1.35; }
+  .main .section { margin-bottom: 7px; }
+  .summary-text { font-size: 10.5px; line-height: 1.45; color: #2f2f2f; }
+  .job { margin-bottom: 6px; }
+  .job-header { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+  .job-company { font-size: 11px; font-weight: 700; color: #1a1a2e; line-height: 1.25; }
+  .job-period { font-size: 9.5px; color: #777; white-space: nowrap; font-weight: 400; }
+  .job-role { font-size: 10px; font-weight: 600; font-style: italic; color: #0F83C0; margin-bottom: 2px; line-height: 1.25; }
+  .job ul { padding-left: 12px; margin-top: 1px; }
+  .job li { font-size: 10px; line-height: 1.42; color: #333; margin-bottom: 1.5px; }
+  .job li strong { font-weight: 700; }
+  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .page { padding: 5mm 8mm; } }
+  .avoid-break, .job, .edu-item, .cert-item, .skill-group { break-inside: avoid; page-break-inside: avoid; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header avoid-break">
+    <h1>{{NAME}}</h1>
+    <div class="header-rule"></div>
+    <div class="contact-row">
+      {{EMAIL}}
+      <span class="sep">|</span>
+      <a href="https://{{LINKEDIN_URL}}">{{LINKEDIN_LABEL}}</a>
+    </div>
+  </div>
+
+  <div class="body-grid">
+
+    <div class="sidebar">
+
+      <div class="section">
+        <span class="section-title">Core Competencies</span>
+        <div class="competencies-grid">
+          <!-- REPEAT_START: COMPETENCY_TAG -->
+          <span class="competency-tag">{{COMPETENCY}}</span>
+          <!-- REPEAT_END: COMPETENCY_TAG -->
+        </div>
+      </div>
+
+      <div class="section avoid-break">
+        <span class="section-title">Education</span>
+        <!-- REPEAT_START: EDU_ITEM -->
+        <div class="edu-item">
+          <div class="edu-degree">{{DEGREE}}</div>
+          <div class="edu-org">{{SCHOOL}}</div>
+        </div>
+        <!-- REPEAT_END: EDU_ITEM -->
+      </div>
+
+      <div class="section avoid-break">
+        <span class="section-title">Certifications</span>
+        <!-- REPEAT_START: CERT_ITEM -->
+        <div class="cert-item">
+          <div class="cert-title">{{CERT_NAME}}</div>
+          <div class="cert-org">{{CERT_ISSUER}}</div>
+        </div>
+        <!-- REPEAT_END: CERT_ITEM -->
+      </div>
+
+      <div class="section avoid-break">
+        <span class="section-title">Skills</span>
+        <!-- REPEAT_START: SKILL_GROUP -->
+        <div class="skill-group">
+          <div class="skill-category">{{SKILL_CATEGORY}}</div>
+          <div class="skill-list">{{SKILL_LIST}}</div>
+        </div>
+        <!-- REPEAT_END: SKILL_GROUP -->
+      </div>
+
+    </div>
+
+    <div class="main">
+
+      <div class="section avoid-break">
+        <span class="section-title">Professional Summary</span>
+        <div class="summary-text">{{SUMMARY}}</div>
+      </div>
+
+      <div class="section">
+        <span class="section-title">Work Experience</span>
+
+        <!-- REPEAT_START: JOB -->
+        <div class="job">
+          <div class="job-header">
+            <span class="job-company">{{COMPANY}}</span>
+            <span class="job-period">{{PERIOD}}</span>
+          </div>
+          <div class="job-role">{{ROLE}}</div>
+          <ul>
+            <!-- REPEAT_START: JOB_BULLET -->
+            <li>{{BULLET}}</li>
+            <!-- REPEAT_END: JOB_BULLET -->
+          </ul>
+        </div>
+        <!-- REPEAT_END: JOB -->
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
